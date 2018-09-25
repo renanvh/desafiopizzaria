@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,19 +25,32 @@ public class PizzaController {
 	private PizzaService pizzaServ;
 	
 	@GetMapping
-	public Iterable<Pizza> listPizza(){
-		return pizzaServ.getAllPizza();
+	public ResponseEntity<Iterable<Pizza>> listPizza(){
+		return ResponseEntity.ok(pizzaServ.getAllPizza());
 	}
 	
 	@PostMapping
-	public Pizza addPizza(@Valid @RequestBody Pizza pizza) {
-		return pizzaServ.addPizza(pizza);
+	public ResponseEntity<Pizza> addPizza(@Valid @RequestBody Pizza pizza) throws UnsupportedEncodingException {
+		if(pizzaServ.addPizza(pizza) != null) {
+			return ResponseEntity.ok(pizzaServ.addPizza(pizza));
+		}
+		return ResponseEntity.badRequest().build();		
 	}
 	
 	@PostMapping("/{pid}/personalizar")
-	public Pizza addAdditional(@Valid @PathVariable int pid, @RequestBody Personalizacao personalizacao) throws UnsupportedEncodingException{
-		return pizzaServ.addAddicional(pid, personalizacao);
+	public ResponseEntity<Pizza> addAdditional(@Valid @PathVariable int pid, @RequestBody Personalizacao personalizacao) throws UnsupportedEncodingException{
+		if(pizzaServ.addAddicional(pid, personalizacao) != null) {
+			return ResponseEntity.ok(pizzaServ.addAddicional(pid, personalizacao));
+		}
+		return ResponseEntity.badRequest().build();		
 	}
 	
+	@GetMapping("/{pid}")
+	public ResponseEntity<Pizza> getPedido(@Valid @PathVariable int pid) {
+		if(pizzaServ.getPedido(pid) != null) {
+			return ResponseEntity.ok(pizzaServ.getPedido(pid));
+		}
+		return ResponseEntity.notFound().build();
+	}
 	
 }

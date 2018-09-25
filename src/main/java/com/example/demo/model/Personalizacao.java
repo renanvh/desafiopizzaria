@@ -4,12 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.ManyToAny;
 
 @Entity
 @Table(name = "tb_personalizacao")
@@ -23,9 +19,9 @@ public class Personalizacao {
 	private String nome;
 	
 	
-	private Double valor;
+	private Double valorAdicional;
 	
-	private int tempo;
+	private int tempoAdicional;
 	
 	public int getId() {
 		return id;
@@ -39,18 +35,19 @@ public class Personalizacao {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Double getValor() {
-		return valor;
+	public Double getValorAdicional() {
+		return valorAdicional;
 	}
-	public void setValor(Double valor) {
-		this.valor = valor;
+	public void setValorAdicional(Double valorAdicional) {
+		this.valorAdicional = valorAdicional;
 	}
-	public int getTempo() {
-		return tempo;
+	public int getTempoAdicional() {
+		return tempoAdicional;
 	}
-	public void setTempo(int tempo) {
-		this.tempo = tempo;
+	public void setTempoAdicional(int tempoAdicional) {
+		this.tempoAdicional = tempoAdicional;
 	}
+	
 	
 	
 }
