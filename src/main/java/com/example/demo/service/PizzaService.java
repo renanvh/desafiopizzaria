@@ -1,9 +1,15 @@
 package com.example.demo.service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dao.PersonalizacaoDao;
 import com.example.demo.dao.PizzaDao;
+import com.example.demo.model.Personalizacao;
 import com.example.demo.model.Pizza;
 
 @Service
@@ -11,6 +17,9 @@ public class PizzaService{
 
 @Autowired
 private PizzaDao pizzaDao;
+
+@Autowired
+private PersonalizacaoDao personalizacaoDao;
 	
 	private enum SizePizza{
 		pequena,media,grande;
@@ -96,6 +105,42 @@ private PizzaDao pizzaDao;
 	public void addTime(Pizza pizza, int time){
 		pizza.setTempoTotal(pizza.getTempoTotal()+time);
 	}
+
+	public Pizza addAddicional(int pid, Personalizacao personalizacao) throws UnsupportedEncodingException {
+		Integer indexOfPersonalizacao = checkPersonalizationName(personalizacao);
+		Pizza pizzaOnDb = pizzaDao.findById(pid).get();
+		if(indexOfPersonalizacao != null) {
+			Personalizacao personalizacaoOnDb = 
+					personalizacaoDao.findById(indexOfPersonalizacao).get();			
+			
+			if(!pizzaOnDb.getPersonalizacoes().contains(personalizacaoOnDb)) {
+				pizzaOnDb.getPersonalizacoes().add(personalizacaoOnDb);
+				
+				Pizza newPizza = putAdditional(pizzaOnDb, personalizacaoOnDb);	
+				BeanUtils.copyProperties(newPizza, pizzaOnDb, "id");
+				
+				return pizzaDao.save(pizzaOnDb);
+			}
+		}
+		return null;
+	}
 	
+	public Integer checkPersonalizationName(Personalizacao p) throws UnsupportedEncodingException {
+		String personalizationName = URLDecoder.decode(p.getNome(), "UTF-8");
+		
+		for (Personalizacao element : personalizacaoDao.findAll()) {
+			if(element.getNome().equals(personalizationName.toLowerCase())) {
+				return element.getId();
+			}
+		}
+		return null;
+	}
+	
+	public Pizza putAdditional(Pizza pizza,Personalizacao personalizacao) {
+		pizza.setTempoTotal(pizza.getTempoTotal()+personalizacao.getTempo());
+		pizza.setValorTotal(pizza.getValorTotal()+personalizacao.getValor());
+		
+		return pizza;
+	}
 }
 

@@ -22,22 +22,11 @@ public class Personalizacao {
 	@NotNull
 	private String nome;
 	
-	@NotNull
+	
 	private Double valor;
 	
-	@NotNull
 	private int tempo;
 	
-	@ManyToOne
-	@JoinColumn(name = "tb_pizza_id")
-	private Pizza pizza;
-	
-	public Pizza getPizza() {
-		return pizza;
-	}
-	public void setPizza(Pizza pizza) {
-		this.pizza = pizza;
-	}
 	public int getId() {
 		return id;
 	}

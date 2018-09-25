@@ -1,14 +1,18 @@
 package com.example.demo.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.Personalizacao;
 import com.example.demo.model.Pizza;
 import com.example.demo.service.PizzaService;
 
@@ -27,6 +31,11 @@ public class PizzaController {
 	@PostMapping
 	public Pizza addPizza(@Valid @RequestBody Pizza pizza) {
 		return pizzaServ.addPizza(pizza);
+	}
+	
+	@PostMapping("/{pid}/personalizar")
+	public Pizza addAdditional(@Valid @PathVariable int pid, @RequestBody Personalizacao personalizacao) throws UnsupportedEncodingException{
+		return pizzaServ.addAddicional(pid, personalizacao);
 	}
 	
 	
