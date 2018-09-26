@@ -16,7 +16,7 @@ public interface PizzaService {
 	public abstract Pizza checkFlavor(Pizza pizza);
 	public abstract void addTime(Pizza pizza, int time);
 	public abstract Pizza addAddicional(int pid, Personalizacao personalizacao) throws UnsupportedEncodingException;
-	public abstract Integer checkPersonalizationName(Personalizacao p) throws UnsupportedEncodingException ;
+	public abstract Integer checkPersonalizationName(String personalizationName) throws UnsupportedEncodingException ;
 	public abstract Pizza putAdditional(Pizza pizza,Personalizacao personalizacao);
 	public abstract Pizza getPedido(int id);
 }

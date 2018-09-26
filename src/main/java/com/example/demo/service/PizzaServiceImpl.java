@@ -103,6 +103,7 @@ private PersonalizacaoDao personalizacaoDao;
 
 	@Override
 	public Pizza checkFlavor(Pizza pizza){
+		
 		FlavorPizza flavor = FlavorPizza.valueOf(pizza.getSabor().toLowerCase());
 		
 		switch (flavor) {
@@ -131,7 +132,8 @@ private PersonalizacaoDao personalizacaoDao;
 	@Override
 	public Pizza addAddicional(int pid, Personalizacao personalizacao) throws UnsupportedEncodingException {
 		try {
-			Integer indexOfPersonalizacao = checkPersonalizationName(personalizacao);
+			String personalizationName = URLDecoder.decode(personalizacao.getNome(), "UTF-8");
+			Integer indexOfPersonalizacao = checkPersonalizationName(personalizationName);
 			Pizza pizzaOnDb = pizzaDao.findById(pid).get();
 			if(indexOfPersonalizacao != null) {
 				Personalizacao personalizacaoOnDb = 
@@ -153,9 +155,7 @@ private PersonalizacaoDao personalizacaoDao;
 	}
 
 	@Override
-	public Integer checkPersonalizationName(Personalizacao p) throws UnsupportedEncodingException {
-		String personalizationName = URLDecoder.decode(p.getNome(), "UTF-8");
-		
+	public Integer checkPersonalizationName(String personalizationName) throws UnsupportedEncodingException {
 		for (Personalizacao element : personalizacaoDao.findAll()) {
 			if(element.getNome().equals(personalizationName.toLowerCase())) {
 				return element.getId();
